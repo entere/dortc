@@ -4,17 +4,17 @@
 
 # 示例和使用方法
 
-1.安装Node.js及npm环境
+1. 安装Node.js及npm环境
 
-2.下载源码到本地 : git clone https://github.com/entere/dortc.git
+2. 下载源码到本地 : git clone https://github.com/entere/dortc.git
 
-3.cd docrtc && npm install
+3. cd docrtc && npm install
 
-4.运行命令 DEBUG=docrtc* npm start
+4. 运行命令 DEBUG=docrtc* npm start
 
-5.在firefox中访问localhost:3000 查看效果 
+5. 在firefox中访问localhost:3000 查看效果 
 
-6.[请使用新版firefox 【点此】 查看](http://localhost:3000)
+6. [请使用新版firefox 【点此】 查看](http://localhost:3000)
 
 
 # WebRTC交互过程
@@ -29,9 +29,9 @@
 
 3. A进入房间，发现B已存在，此时A通过PC所提供的createOffer()方法建立一个包含A的SDP描述符的offer信令；
 
-4.A通过PC所提供的setLocalDescription()方法，将A的SDP描述符交给A的PC实例(就是存储到本地)；
+4. A通过PC所提供的setLocalDescription()方法，将A的SDP描述符交给A的PC实例(就是存储到本地)；
 
-5.A将offer信令通过服务器发送到B的信箱，同时，A也监听自己的信箱；
+5. A将offer信令通过服务器发送到B的信箱，同时，A也监听自己的信箱；
 
 6. B发现信箱下有信件，查知此信为A的offer，于是将offer信令中所包含的的SDP描述符提取出来，通过PC所提供的setRemoteDescription()方法交给B的PC实例(就是存储到本地)；
 
@@ -41,7 +41,7 @@
 
 9. B将answer信令通过服务器发送到A的信箱；
 
-10.A接收到B的answer信令后，将其中B的SDP描述符提取出来，调用setRemoteDescripttion()方法交给A的PC实例(就是存储到本地)；
+10. A接收到B的answer信令后，将其中B的SDP描述符提取出来，调用setRemoteDescripttion()方法交给A的PC实例(就是存储到本地)；
 
 通过在这一系列的信令交换之后，A和B所创建的PC实例都包含A和B的SDP描述符了，完成了两件事的第一件。我们还需要完成第二件事——获取连接两端主机的网络地址
 
