@@ -1,0 +1,161 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('dortc:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+//entere
+var io = require('socket.io')(server);
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+//entere
+var onlineRooms = []; //在线房间 比如 ['533612929']
+var onlineRoomSockets = {}; //房间socket 比如{'533612929': [ '/#3c_WeF79iY8QfnzeAAAC', '/#deB6ZUwv9Wax2LmuAAAD' ] }
+
+io.sockets.on('connection', function(socket){
+    
+    socket.on('message', function(room, message) {
+      console.log('Client said: ', message);
+    // for a real app, would be room-only (not broadcast) 信息传输对象为所有client，排除当前socket对应的client
+      socket.broadcast.to(room).emit('message', message);// sending to all clients in room except sender
+    });
+
+
+    socket.on('create or join', function(room) {
+      console.log('Received request to create or join room ' + room);
+      socket.myroom = room;
+      
+      //检查在线rooms列表，如果不在里面就加入
+      if(onlineRooms.indexOf(room) === -1) {
+        onlineRooms.push(room);
+        
+      }
+      if(!onlineRoomSockets.hasOwnProperty(room)) {
+        onlineRoomSockets[room] = [];
+      }
+      onlineRoomSockets[room].push(socket.id);
+      console.log('connect onlineRooms',onlineRooms);
+      console.log('connect onlineRoomSockets',onlineRoomSockets);
+      //var numClients = io.engine.clientsCount;
+      var numClients = onlineRoomSockets[room].length;
+      console.log('Room ' + room + ' now has ' + numClients + ' client(s)');
+
+      if (numClients === 1) {
+        socket.join(room);
+        console.log('Client ID ' + socket.id + ' created room ' + room);
+        socket.emit('created', room, socket.id);
+
+      } else if (numClients === 2) {
+        console.log('Client ID ' + socket.id + ' joined room ' + room);
+        io.sockets.in(room).emit('join', room);//emit to all socket client in the room
+        socket.join(room);
+        socket.emit('joined', room, socket.id);
+        io.sockets.in(room).emit('ready');
+      } else { // max two clients
+        socket.emit('full', room);
+        return;
+      }
+    });
+
+    socket.on('bye', function(){
+      console.log('received bye'+io.engine.clientsCount);
+    });
+
+    //监听用户退出
+    socket.on('disconnect', function(){
+      //将退出的用户从在线列表中删除
+      onlineRoomSockets[socket.myroom].pop(socket.id);
+      if(onlineRoomSockets[socket.myroom].length === 0 ) {
+        delete onlineRoomSockets[socket.myroom];
+        onlineRooms.pop(socket.myroom);
+      }
+      console.log('disconnect onlineRooms:', onlineRooms);
+      console.log('disconnect onlineRoomSockets:', onlineRoomSockets);
+    });
+    
+
+    
+});
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
