@@ -3,13 +3,13 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('webrtc', { title : 'webrtc' });
+  res.render('webrtc', { title : 'webrtc', curr_url: req.headers.host + req.originalUrl });
 });
 
 /* GET home page. */
 router.get('/r/:id', function(req, res, next) {
     
-  res.render('webrtc', { title : 'webrtc',id :  req.params.id, curr_url: req.headers.host + req.originalUrl});
+  res.render('webrtc', { title : 'webrtc', id :  req.params.id, curr_url: req.headers.host + req.originalUrl});
 });
 
 
