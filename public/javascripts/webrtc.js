@@ -42,6 +42,7 @@ var WebRTC = {
       });
 
     } else {
+      this.fullScreen(document.documentElement);
       room = this.getRoomIdFromUrl();
       socket = io.connect();
       this.socketEvent();
@@ -286,6 +287,19 @@ var WebRTC = {
   //todo 
   createRandom : function () {
     return (new Date()-0).toString().substring(4);
+  },
+
+  fullScreen : function(element) {
+    
+    if(element.requestFullscreen) {  
+      element.requestFullscreen();  
+    } else if(element.mozRequestFullScreen) {  
+      element.mozRequestFullScreen();  
+    } else if(element.webkitRequestFullscreen) {  
+      element.webkitRequestFullscreen();  
+    } else if(element.msRequestFullscreen) {  
+      element.msRequestFullscreen();  
+    }  
   }
 
 };

@@ -75,7 +75,13 @@ io.sockets.on('connection', function(socket){
         socket.emit('joined', room, socket.id);
         io.sockets.in(room).emit('ready');
       } else { // max two clients
+        onlineRoomSockets[room].pop(socket.id);
         socket.emit('full', room);
+
+
+        console.log('connect 3 onlineRooms',onlineRooms);
+        console.log('connect 3 onlineRoomSockets',onlineRoomSockets);
+
         return;
       }
     });
@@ -87,7 +93,13 @@ io.sockets.on('connection', function(socket){
     //监听用户退出
     socket.on('disconnect', function(){
       //将退出的用户从在线列表中删除
-      onlineRoomSockets[socket.myroom].pop(socket.id);
+      if(onlineRoomSockets.hasOwnProperty(room)) {
+        if(onlineRoomSockets[socket.myroom].indexOf(socket.id) >=0)  {
+          onlineRoomSockets[socket.myroom].pop(socket.id);
+        }
+      }
+      
+      
       if(onlineRoomSockets[socket.myroom].length === 0 ) {
         delete onlineRoomSockets[socket.myroom];
         onlineRooms.pop(socket.myroom);

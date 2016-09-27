@@ -1,6 +1,6 @@
 # dortc
 
-> `docrtc` 是用`WebRTC` 实现视频通话的轮子。 WebRTC（http://webrtc.org/） 是 `google`主推的一个项目，旨在使得浏览器能为实时通信（RTC）提供简单的JavaScript接口。有了它，直接通过浏览器的 `Web` 页面就可以实现音视频聊天功能，无需任何插件。
+> docrtc 是用 WebRTC 实现视频通话的轮子。 WebRTC（http://webrtc.org/） 是 google 主推的一个项目，旨在使得浏览器能为实时通信 （RTC）提供简单的 JavaScript接口。有了它，直接通过浏览器的  Web 页面就可以实现音视频聊天功能，无需任何插件。
 
 # 示例和使用方法
 
@@ -26,6 +26,8 @@ DEBUG=docrtc* npm start
 
 ### 一、获得本机SDP描述符并交换
 
+```
+
 1. A和B打开浏览器后都调用getUserMedia获取本地视频流，在浏览器上播放
 
 2. B先进入房间，此时房间中没有其他用户，B在房间下建立属于自己的节点，且监听自己的信箱
@@ -46,6 +48,8 @@ DEBUG=docrtc* npm start
 
 10. A接收到B的answer信令后，将其中B的SDP描述符提取出来，调用setRemoteDescripttion()方法交给A的PC实例(就是存储到本地)
 
+```
+
 通过在这一系列的信令交换之后，A和B所创建的PC实例都包含A和B的SDP描述符了，完成了两件事的第一件。我们还需要完成第二件事——获取连接两端主机的网络地址
 
 ### 二、过ICE框架建立NAT/防火墙穿越的连接，连接两段主机的网络地址
@@ -65,6 +69,7 @@ var pc = new RTCPeerConnection(iceServerConfig);
 
 当然这个地址也需要交换，还是以AB两位为例，交换的流程如下（RTCPeerConnection简称PC）：
 
+```
 1. A、B各创建配置了ICE服务器的PC实例，并为其添加onicecandidate事件回调
 
 2. 当网络候选可用时，将会调用onicecandidate函数
@@ -72,6 +77,8 @@ var pc = new RTCPeerConnection(iceServerConfig);
 3. 在回调函数内部，A或B将网络候选的消息封装在ICE Candidate信令中，通过服务器中转，传递给对方
 
 4. 甲或乙接收到对方通过服务器中转所发送过来ICE Candidate信令时，将其解析并获得网络候选，将其通过PC实例的addIceCandidate()方法加入到PC实例中
+
+```
 
 
 > 这样连接就创立完成了，可以向RTCPeerConnection中通过addStream()加入流来传输媒体流数据。将流加入到RTCPeerConnection实例中后，对方就可以通过onaddstream所绑定的回调函数监听到了。调用addStream()可以在连接完成之前，在连接建立之后，对方一样能监听到媒体流
