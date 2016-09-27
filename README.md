@@ -15,7 +15,7 @@ DEBUG=docrtc* npm start
 
 ```
 
-在firefox中访问localhost:3000 [请使用新版firefox 【点此】 在线预览](http://localhost:3000) 
+在firefox中访问localhost:3000 [请使用新版firefox 【点此】 在线预览](http://219.238.250.38:3000) 
 
 
 
