@@ -8,7 +8,8 @@ router.get('/', function(req, res, next) {
 
 /* GET home page. */
 router.get('/r/:id', function(req, res, next) {
-  res.render('webrtc', { title : 'webrtc',id :  req.params.id});
+    
+  res.render('webrtc', { title : 'webrtc',id :  req.params.id, curr_url: req.headers.host + req.originalUrl});
 });
 
 

@@ -93,7 +93,7 @@ io.sockets.on('connection', function(socket){
     //监听用户退出
     socket.on('disconnect', function(){
       //将退出的用户从在线列表中删除
-      if(onlineRoomSockets.hasOwnProperty(room)) {
+      if(onlineRoomSockets.hasOwnProperty(socket.myroom)) {
         if(onlineRoomSockets[socket.myroom].indexOf(socket.id) >=0)  {
           onlineRoomSockets[socket.myroom].pop(socket.id);
         }

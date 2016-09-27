@@ -27,6 +27,7 @@ var WebRTC = {
     //判断url 是 / or /r/4597714
     if(this.getRoomIdFromUrl() === undefined) {
       $("#room-selection").removeClass('hidden');
+      $("#sharing-div").attr("class","");
       
       $("#random-button").on("click", function() {
         $("#room-id-input").val(that.createRandom());
@@ -136,6 +137,7 @@ var WebRTC = {
       console.log('Adding local stream.');
       localVideo.src = window.URL.createObjectURL(stream);
       localStream = stream;
+
       that.sendMessage('got user media');
       if (isInitiator) {
         that.startPeerConnection();
@@ -187,6 +189,7 @@ var WebRTC = {
             remoteVideo.src = window.URL.createObjectURL(event.stream);
             
             //交换本地和远程视频，让远程在localVideo显示，本地视频在miniVideo显示
+            $("#sharing-div").attr("class","");
             $("#videos").attr("class","active");
             $("#mini-video").attr("class","active");
             $("#remote-video").attr("class","active");
