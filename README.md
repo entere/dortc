@@ -1,6 +1,14 @@
+# Demo
+
+请使用新版firefox
+
+[点此查看视频通话演示](http://219.238.250.38:3000)
+
 # dortc
 
 > docrtc 是用 WebRTC 实现视频通话的轮子。 WebRTC（http://webrtc.org/） 是 google 主推的一个项目，旨在使得浏览器能为实时通信 （RTC）提供简单的 JavaScript接口。有了它，直接通过浏览器的  Web 页面就可以实现音视频聊天功能，无需任何插件。
+
+
 
 # 示例和使用方法
 
@@ -15,7 +23,7 @@ DEBUG=docrtc* npm start
 
 ```
 
-在firefox中访问localhost:3000 [请使用新版firefox 【点此】 在线预览](http://219.238.250.38:3000) 
+在firefox中访问localhost:3000  
 
 
 
