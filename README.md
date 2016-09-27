@@ -27,7 +27,6 @@ DEBUG=docrtc* npm start
 ### 一、获得本机SDP描述符并交换
 
 ```
-
 1. A和B打开浏览器后都调用getUserMedia获取本地视频流，在浏览器上播放
 
 2. B先进入房间，此时房间中没有其他用户，B在房间下建立属于自己的节点，且监听自己的信箱
@@ -47,7 +46,6 @@ DEBUG=docrtc* npm start
 9. B将answer信令通过服务器发送到A的信箱
 
 10. A接收到B的answer信令后，将其中B的SDP描述符提取出来，调用setRemoteDescripttion()方法交给A的PC实例(就是存储到本地)
-
 ```
 
 通过在这一系列的信令交换之后，A和B所创建的PC实例都包含A和B的SDP描述符了，完成了两件事的第一件。我们还需要完成第二件事——获取连接两端主机的网络地址
@@ -77,7 +75,6 @@ var pc = new RTCPeerConnection(iceServerConfig);
 3. 在回调函数内部，A或B将网络候选的消息封装在ICE Candidate信令中，通过服务器中转，传递给对方
 
 4. 甲或乙接收到对方通过服务器中转所发送过来ICE Candidate信令时，将其解析并获得网络候选，将其通过PC实例的addIceCandidate()方法加入到PC实例中
-
 ```
 
 
